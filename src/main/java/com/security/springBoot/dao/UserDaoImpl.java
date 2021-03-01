@@ -1,5 +1,6 @@
 package com.security.springBoot.dao;
 
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 import com.security.springBoot.models.Role;
 import com.security.springBoot.models.User;
@@ -18,6 +19,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserByName(String name) {
         User user = entityManager.createQuery("select user from User user where user.name = :username", User.class).setParameter("username", name).getSingleResult();
+        Hibernate.initialize(user.getRoles());
         return user;
     }
 
@@ -42,6 +44,9 @@ public class UserDaoImpl implements UserDao {
     public List<User> userList() {
         try {
             List<User> users = entityManager.createQuery("select user from User user").getResultList();
+            for(User i : users) {
+                Hibernate.initialize(i.getRoles());
+            }
             return users;
         }catch (NullPointerException e) {
             return new ArrayList<>();
@@ -51,6 +56,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserById(long id) {
         User user = entityManager.find(User.class, id);
+        Hibernate.initialize(user.getRoles());
         return user;
     }
 
