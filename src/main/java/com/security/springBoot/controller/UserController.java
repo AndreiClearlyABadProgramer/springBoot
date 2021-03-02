@@ -63,7 +63,7 @@ public class UserController {
 		return "redirect:/logout";
 	}
 
-	@GetMapping(value = "/admin/Remove/{id}")
+	@RequestMapping(value = "/admin/Remove/{id}", method = {RequestMethod.DELETE, RequestMethod.GET})
 	public String remove(@PathVariable("id") long id){
 		userService.deleteUser(id);
 		return "redirect:/admin";
@@ -80,7 +80,7 @@ public class UserController {
 		return "Edit";
 	}
 
-	@PostMapping("/admin/{id}/Edit")
+	@RequestMapping(value = "/admin/{id}/Edit", method = {RequestMethod.PUT, RequestMethod.POST})
 	public String update(@ModelAttribute("user") User user, @PathVariable("id") long id){
 		userService.updateUser(user);
 		return "redirect:/admin";
