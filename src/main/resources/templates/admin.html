@@ -24,8 +24,8 @@
         <td th:utext="${user.name}">name</td>
         <td th:utext="${user.password}">password</td>
         <td th:utext="${user.roles}">role</td>
-        <td><a th:href="@{/admin/{id}/Edit(id=${user.id})}">edit</a></td>
-        <td><a th:href="@{/admin/Remove/{id}(id=${user.id})}">remove</a></td>
+        <td><a th:href="@{/admin/{id}/edit(id=${user.id})}">edit</a></td>
+        <td><a th:href="@{/admin/remove/{id}(id=${user.id})}">remove</a></td>
     </tr>
 </table>
 <br/>

@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/")
 public class UserController {
 
 	@Qualifier("userDetailsServiceImpl")
@@ -30,13 +29,13 @@ public class UserController {
 	}
 
 
-	@GetMapping("user")
+	@GetMapping("/user")
 	public String userPage(Principal principal,  Model model){
 		model.addAttribute("user", service.loadUserByUsername(principal.getName()));
 		return "user";
 	}
 
-	@GetMapping("admin")
+	@GetMapping("/admin")
 	public String adminPage(Model model){
 		model.addAttribute("user", new User());
 		List<Role> roles = new ArrayList<>();
@@ -63,13 +62,20 @@ public class UserController {
 		return "redirect:/logout";
 	}
 
-	@RequestMapping(value = "/admin/Remove/{id}", method = {RequestMethod.DELETE, RequestMethod.GET})
+	@GetMapping("/admin/remove/{id}")
+	public String removeUser(@PathVariable("id") long id, Model model){
+		model.addAttribute("user", userService.getUserById(id));
+
+		return "delete";
+	}
+
+	@DeleteMapping(value = "/admin/remove/{id}")
 	public String remove(@PathVariable("id") long id){
 		userService.deleteUser(id);
 		return "redirect:/admin";
 	}
 
-	@GetMapping(value = "/admin/{id}/Edit")
+	@GetMapping(value = "/admin/{id}/edit")
 	public String edit(@PathVariable("id") long id, Model model){
 		model.addAttribute("user", userService.getUserById(id));
 		List<Role> roles = new ArrayList<>();
@@ -77,16 +83,16 @@ public class UserController {
 		roles.add(new Role("ROLE_ADMIN"));
 		model.addAttribute("roleList", roles);
 		model.addAttribute("userList", userService.userList());
-		return "Edit";
+		return "edit";
 	}
 
-	@RequestMapping(value = "/admin/{id}/Edit", method = {RequestMethod.PUT, RequestMethod.POST})
+	@PutMapping("/admin/{id}/edit")
 	public String update(@ModelAttribute("user") User user, @PathVariable("id") long id){
 		userService.updateUser(user);
 		return "redirect:/admin";
 	}
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @GetMapping("/login")
     public String loginPage() {
         return "login";
     }
